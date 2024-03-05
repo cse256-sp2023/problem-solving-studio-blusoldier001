@@ -1,4 +1,37 @@
 // ---- Define your dialogs  and panels here ----
+let permPanel = define_new_effective_permissions("permPanelAttribute", true)
+$('#sidepanel').append(permPanel)
+
+let addUserSelector = define_new_user_select_field("permPanelAttribute", "View User Permissions", function(selected_user) {
+    $('#permPanelAttribute').attr('filepath', '/C/presentation_documents/important_file.txt')
+    $('#permPanelAttribute').attr('username', selected_user)
+    
+ })
+$('#sidepanel').append(addUserSelector)
+
+let infoDialog = define_new_dialog("permPanelAttribute", title='Permission Info', options = {})
+
+$('.perm_info').click(function(){
+
+    // stuff that should happen on click goes here
+    console.log('clicked!')
+    infoDialog.dialog('open')
+    let currFilePath = $('#permPanelAttribute').attr('filepath')
+    let currUsername = $('#permPanelAttribute').attr('username')
+    let currPermType = $(this).attr('permission_name')
+    console.log(currFilePath)
+    console.log(currUsername)
+    console.log(currPermType)
+    let currFileObject = path_to_file[currFilePath]
+    let currUserObject =  all_users[currUsername]
+    let explanationObject = allow_user_action(currFileObject, currUserObject, currPermType)
+    let explanationText = get_explanation_text(explanationObject)
+    infoDialog.empty()
+    infoDialog.append(explanationText)
+
+
+
+})
 
 
 
@@ -68,6 +101,7 @@ $('.permbutton').click( function( e ) {
     // Emit a click for logging purposes:
     emitter.dispatchEvent(new CustomEvent('userEvent', { detail: new ClickEntry(ActionEnum.CLICK, (e.clientX + window.pageXOffset), (e.clientY + window.pageYOffset), e.target.id,new Date().getTime()) }))
 });
+
 
 
 // ---- Assign unique ids to everything that doesn't have an ID ----
